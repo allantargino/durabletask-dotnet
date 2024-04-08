@@ -1,7 +1,8 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -97,6 +98,14 @@ public abstract class OrchestrationAnalyzer : DiagnosticAnalyzer
 
         orchestrations.Add(rootOrchestration);
 
+        // find all members referenced by the method
+        if (!result.MembersReferencedByMethod.ContainsKey(callerSymbol))
+        {
+            IEnumerable<IMemberReferenceOperation> memberReferences = semanticModel.GetOperation(callerSyntax).Descendants().OfType<IMemberReferenceOperation>();
+            ImmutableArray<ISymbol> referencedMembers = memberReferences.Select(mr => mr.Member).ToImmutableArray();
+            bool _ = result.MembersReferencedByMethod.TryAdd(callerSymbol, referencedMembers);
+        }
+
         return true;
     }
 
@@ -113,16 +122,18 @@ public abstract class OrchestrationAnalyzer : DiagnosticAnalyzer
     protected readonly struct OrchestrationAnalysisResult
     {
         public ConcurrentDictionary<IMethodSymbol, ConcurrentBag<OrchestrationMethod>> OrchestrationsByMethod { get; }
+        public ConcurrentDictionary<IMethodSymbol, ImmutableArray<ISymbol>> MembersReferencedByMethod { get; }
 
         public OrchestrationAnalysisResult()
         {
             this.OrchestrationsByMethod = new(SymbolEqualityComparer.Default);
+            this.MembersReferencedByMethod = new(SymbolEqualityComparer.Default);
         }
     }
 
     [DebuggerDisplay("[{FunctionName}] {OrchestrationMethodSymbol.Name}")]
     protected readonly struct OrchestrationMethod(string functionName, IMethodSymbol orchestrationMethodSymbol)
-        {
+    {
         public string FunctionName { get; } = functionName;
         public IMethodSymbol OrchestrationMethodSymbol { get; } = orchestrationMethodSymbol;
     }
