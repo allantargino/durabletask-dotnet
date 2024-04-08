@@ -229,32 +229,6 @@ DateTime NotCalled() => DateTime.Now;
         await VerifyCS.VerifyDurableTaskAnalyzerAsync(code);
     }
 
-    [Fact]
-    public async Task TODO()
-    {
-        string code = Wrap(@"
-readonly DateTime currentDay1;
-readonly DateTime currentDay2 = DateTime.Today;
-DateTime CurrentDay3 { get; set; } = DateTime.Today;
-
-public Orchestrator()
-{
-    currentDay1 = DateTime.Today;
-}
-
-[Function(nameof(Run))]
-bool Run([OrchestrationTrigger] TaskOrchestrationContext ctx)
-{
-    return CurrentDay3 == currentDay2 && currentDay2 == currentDay1;
-}
-");
-
-        await VerifyCS.VerifyDurableTaskAnalyzerAsync(code);
-    }
-
-    // TODO: Property inside class
-    // TODO: Test implementation using Immutable?
-
     static DiagnosticResult BuildDiagnostic()
     {
         return VerifyCS.Diagnostic(DateTimeOrchestrationAnalyzer.DiagnosticId);

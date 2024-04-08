@@ -25,7 +25,7 @@ public sealed class DateTimeOrchestrationAnalyzer : OrchestrationAnalyzer
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
-    protected override void RegisterAdditionalCompilationStartAction(CompilationStartAnalysisContext context, ConcurrentDictionary<IMethodSymbol, ConcurrentBag<OrchestrationMethod>> orchestrationsByMethod)
+    protected override void RegisterAdditionalCompilationStartAction(CompilationStartAnalysisContext context, OrchestrationAnalysisResult orchestrationAnalysisResult)
     {
         INamedTypeSymbol systemDateTimeSymbol = context.Compilation.GetSpecialType(SpecialType.System_DateTime);
 
@@ -54,13 +54,13 @@ public sealed class DateTimeOrchestrationAnalyzer : OrchestrationAnalyzer
             {
                 if (symbol is IMethodSymbol method)
                 {
-                    if (orchestrationsByMethod.TryGetValue(method, out ConcurrentBag<OrchestrationMethod> orchestrations))
+                    if (orchestrationAnalysisResult.OrchestrationsByMethod.TryGetValue(method, out ConcurrentBag<OrchestrationMethod> orchestrations))
                     {
                         string methodName = symbol.Name;
                         string dateTimePropertyName = operation.Property.ToString();
                         string functionsNames = string.Join(", ", orchestrations.Select(o => o.FunctionName).OrderBy(n => n));
 
-                        // e.g.: "The method 'Method' uses 'System.Date.Time' that may cause non-deterministic behavior when is invoked from Orchestration Function 'Run'"
+                        // e.g.: "The method 'Method' uses 'System.Date.Now' that may cause non-deterministic behavior when is invoked from Orchestration Function 'Run'"
                         ctx.ReportDiagnostic(Rule, operation, methodName, dateTimePropertyName, functionsNames);
                     }
                 }
