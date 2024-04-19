@@ -222,6 +222,31 @@ public class MyOrchestrator : ITaskOrchestrator
         await VerifyCS.VerifyDurableTaskAnalyzerAsync(code, expected);
     }
 
+    [Fact]
+    public async Task TaskOrchestratorWithInheritanceImplementingInterfaceHasDiag()
+    {
+        string code = Wrapper.WrapTaskOrchestrator(@"
+public abstract class MyOrchestrator : TaskOrchestrator<string, DateTime>
+{
+    public override Task<DateTime> RunAsync(TaskOrchestrationContext context, string input)
+    {
+        return Task.FromResult(Method());
+    }
+
+    protected abstract DateTime Method();
+}
+
+public class MyOrchestrator2 : MyOrchestrator
+{
+    protected override DateTime Method() => {|#0:DateTime.Now|};
+}
+");
+
+        DiagnosticResult expected = BuildDiagnostic().WithLocation(0).WithArguments("Method", "System.DateTime.Now", "MyOrchestrator");
+
+        await VerifyCS.VerifyDurableTaskAnalyzerAsync(code, expected);
+    }
+
 
     [Fact]
     public async Task FuncOrchestratorWithLambdaHasDiag()
