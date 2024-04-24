@@ -1,0 +1,9 @@
+﻿M:System.Environment.ExpandEnvironmentVariables(System.String)
+M:System.Environment.GetEnvironmentVariable(System.String)
+M:System.Environment.GetEnvironmentVariable(System.String,System.EnvironmentVariableTarget)
+M:System.Environment.GetEnvironmentVariables
+M:System.Environment.GetEnvironmentVariables(System.EnvironmentVariableTarget)
+T:System.Threading.Thread
+T:System.Net.Http.HttpClient
+M:System.Threading.Tasks.Task.Run(System.Action)
+M:System.Threading.Tasks.TaskFactory.StartNew(System.Action)
