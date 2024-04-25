@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 using Microsoft.CodeAnalysis;
@@ -20,10 +20,30 @@ public sealed class KnownTypeSymbols(Compilation compilation)
     INamedTypeSymbol? taskOrchestratorInterface;
     INamedTypeSymbol? taskOrchestratorBaseClass;
     INamedTypeSymbol? durableTaskRegistry;
+    INamedTypeSymbol? taskOrchestrationContext;
+    INamedTypeSymbol? durableClientAttribute;
+    INamedTypeSymbol? durableTaskClient;
+    INamedTypeSymbol? entityTriggerAttribute;
+    INamedTypeSymbol? taskEntityDispatcher;
     INamedTypeSymbol? guid;
     INamedTypeSymbol? thread;
     INamedTypeSymbol? task;
     INamedTypeSymbol? taskT;
+    INamedTypeSymbol? taskFactory;
+    INamedTypeSymbol? taskContinuationOptions;
+    INamedTypeSymbol? taskFactoryT;
+    INamedTypeSymbol? cancellationToken;
+    INamedTypeSymbol? environment;
+    INamedTypeSymbol? httpClient;
+    INamedTypeSymbol? blobServiceClient;
+    INamedTypeSymbol? blobContainerClient;
+    INamedTypeSymbol? blobClient;
+    INamedTypeSymbol? queueServiceClient;
+    INamedTypeSymbol? queueClient;
+    INamedTypeSymbol? tableServiceClient;
+    INamedTypeSymbol? tableClient;
+    INamedTypeSymbol? cosmosClient;
+    INamedTypeSymbol? sqlConnection;
 
     /// <summary>
     /// Gets an OrchestrationTriggerAttribute type symbol.
@@ -51,6 +71,31 @@ public sealed class KnownTypeSymbols(Compilation compilation)
     public INamedTypeSymbol? DurableTaskRegistry => this.GetOrResolveFullyQualifiedType("Microsoft.DurableTask.DurableTaskRegistry", ref this.durableTaskRegistry);
 
     /// <summary>
+    /// Gets a TaskOrchestrationContext type symbol.
+    /// </summary>
+    public INamedTypeSymbol? TaskOrchestrationContext => this.GetOrResolveFullyQualifiedType("Microsoft.DurableTask.TaskOrchestrationContext", ref this.taskOrchestrationContext);
+
+    /// <summary>
+    /// Gets a DurableClientAttribute type symbol.
+    /// </summary>
+    public INamedTypeSymbol? DurableClientAttribute => this.GetOrResolveFullyQualifiedType("Microsoft.Azure.Functions.Worker.DurableClientAttribute", ref this.durableClientAttribute);
+
+    /// <summary>
+    /// Gets a DurableTaskClient type symbol.
+    /// </summary>
+    public INamedTypeSymbol? DurableTaskClient => this.GetOrResolveFullyQualifiedType("Microsoft.DurableTask.Client.DurableTaskClient", ref this.durableTaskClient);
+
+    /// <summary>
+    /// Gets an EntityTriggerAttribute type symbol.
+    /// </summary>
+    public INamedTypeSymbol? EntityTriggerAttribute => this.GetOrResolveFullyQualifiedType("Microsoft.Azure.Functions.Worker.EntityTriggerAttribute", ref this.entityTriggerAttribute);
+
+    /// <summary>
+    /// Gets a TaskEntityDispatcher type symbol.
+    /// </summary>
+    public INamedTypeSymbol? TaskEntityDispatcher => this.GetOrResolveFullyQualifiedType("Microsoft.Azure.Functions.Worker.TaskEntityDispatcher", ref this.taskEntityDispatcher);
+
+    /// <summary>
     /// Gets a Guid type symbol.
     /// </summary>
     public INamedTypeSymbol? GuidType => this.GetOrResolveFullyQualifiedType(typeof(Guid).FullName, ref this.guid);
@@ -69,6 +114,36 @@ public sealed class KnownTypeSymbols(Compilation compilation)
     /// Gets a Task&lt;T&gt; type symbol.
     /// </summary>
     public INamedTypeSymbol? TaskT => this.GetOrResolveFullyQualifiedType(typeof(Task<>).FullName, ref this.taskT);
+
+    public INamedTypeSymbol? TaskFactory => this.GetOrResolveFullyQualifiedType(typeof(TaskFactory).FullName, ref this.taskFactory);
+
+    public INamedTypeSymbol? TaskFactoryT => this.GetOrResolveFullyQualifiedType(typeof(TaskFactory<>).FullName, ref this.taskFactoryT);
+
+    public INamedTypeSymbol? TaskContinuationOptions => this.GetOrResolveFullyQualifiedType(typeof(TaskContinuationOptions).FullName, ref this.taskContinuationOptions);
+
+    public INamedTypeSymbol? CancellationToken => this.GetOrResolveFullyQualifiedType(typeof(CancellationToken).FullName, ref this.cancellationToken);
+
+    public INamedTypeSymbol? Environment => this.GetOrResolveFullyQualifiedType("System.Environment", ref this.environment);
+
+    public INamedTypeSymbol? HttpClient => this.GetOrResolveFullyQualifiedType("System.Net.Http.HttpClient", ref this.httpClient);
+
+    public INamedTypeSymbol? BlobServiceClient => this.GetOrResolveFullyQualifiedType("Azure.Storage.Blobs.BlobServiceClient", ref this.blobServiceClient);
+
+    public INamedTypeSymbol? BlobContainerClient => this.GetOrResolveFullyQualifiedType("Azure.Storage.Blobs.BlobContainerClient", ref this.blobContainerClient);
+
+    public INamedTypeSymbol? BlobClient => this.GetOrResolveFullyQualifiedType("Azure.Storage.Blobs.BlobClient", ref this.blobClient);
+
+    public INamedTypeSymbol? QueueServiceClient => this.GetOrResolveFullyQualifiedType("Azure.Storage.Queues.QueueServiceClient", ref this.queueServiceClient);
+
+    public INamedTypeSymbol? QueueClient => this.GetOrResolveFullyQualifiedType("Azure.Storage.Queues.QueueClient", ref this.queueClient);
+
+    public INamedTypeSymbol? TableServiceClient => this.GetOrResolveFullyQualifiedType("Azure.Data.Tables.TableServiceClient", ref this.tableServiceClient);
+
+    public INamedTypeSymbol? TableClient => this.GetOrResolveFullyQualifiedType("Azure.Data.Tables.TableClient", ref this.tableClient);
+
+    public INamedTypeSymbol? CosmosClient => this.GetOrResolveFullyQualifiedType("Microsoft.Azure.Cosmos.CosmosClient", ref this.cosmosClient);
+
+    public INamedTypeSymbol? SqlConnection => this.GetOrResolveFullyQualifiedType("Microsoft.Data.SqlClient.SqlConnection", ref this.sqlConnection);
 
     INamedTypeSymbol? GetOrResolveFullyQualifiedType(string fullyQualifiedName, ref INamedTypeSymbol? field)
     {
